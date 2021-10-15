@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import ShowPlayerInfo from './ShowPlayerInfo';
 
 function FetchPlayer() {
   const [player, setPlayer] = useState([]);
@@ -10,7 +11,7 @@ function FetchPlayer() {
   }, []);
 
   return (
-    <div>Player: {player[0].url}</div>
+    <ShowPlayerInfo playerInfo={player}/>
   );
 }
 
