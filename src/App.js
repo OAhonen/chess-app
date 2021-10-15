@@ -1,9 +1,9 @@
-import logo from './logo.svg';
 import './App.css';
+import FetchPlayer from './FetchPlayer';
 
 function App() {
   return (
-    "hello"
+    <FetchPlayer></FetchPlayer>
   );
 }
 
