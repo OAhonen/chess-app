@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import ShowPlayerInfo from './ShowPlayerInfo';
 
-function FetchPlayer() {
-  console.log('hello');
+function FetchPlayer(props) {
   const [player, setPlayer] = useState([]);
-  const [loading, isLoading] = useState(true)
+  const [loading, isLoading] = useState(true);
+  let name = props.name;
+  let month = props.month;
+  console.log(name);
+  console.log(month);
 
   React.useEffect(() => {
-    const url = 'https://api.chess.com/pub/player/ahone9/games/2021/04';
+    const url = 'https://api.chess.com/pub/player/' + name + '/games/2021/' + month;
 
     const fetchData = async () => {
         try {
@@ -24,7 +27,7 @@ function FetchPlayer() {
 }, []);
 
   return (
-    loading ? <div>loading...</div> : <ShowPlayerInfo playerInfo={player}/>
+    loading ? <div>loading...</div> : <ShowPlayerInfo playerInfo={player} name={name}/>
   );
 }
 
