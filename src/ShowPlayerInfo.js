@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTable } from 'react-table'
+import { useSortBy, useTable } from 'react-table'
 
 function ShowPlayerInfo(props) {
   let playerInfo = props.playerInfo;
@@ -18,7 +18,7 @@ function ShowPlayerInfo(props) {
       },
       {
         Header: 'White',
-        accessor: 'white', // accessor is the "key" in the data
+        accessor: 'white',
       },
       {
         Header: 'Rating',
@@ -55,7 +55,7 @@ function ShowPlayerInfo(props) {
     headerGroups,
     rows,
     prepareRow,
-  } = useTable({ columns, data })
+  } = useTable({ columns, data }, useSortBy)
   
   if (playerInfo.length === 0) {
     return <div>No games played in this month.</div>
@@ -87,7 +87,7 @@ function ShowPlayerInfo(props) {
            <tr {...headerGroup.getHeaderGroupProps()}>
              {headerGroup.headers.map(column => (
                <th
-                 {...column.getHeaderProps()}
+                 {...column.getHeaderProps(column.getSortByToggleProps())}
                  style={{
                    borderBottom: 'solid 3px red',
                    background: 'aliceblue',
@@ -96,6 +96,13 @@ function ShowPlayerInfo(props) {
                  }}
                >
                  {column.render('Header')}
+                 <span>
+                    {column.isSorted
+                      ? column.isSortedDesc
+                        ? ' 🔽'
+                        : ' 🔼'
+                      : ''}
+                  </span>
                </th>
              ))}
            </tr>
