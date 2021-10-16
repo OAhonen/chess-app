@@ -23,6 +23,15 @@ function ShowPlayerInfo(props) {
       {
         Header: 'Winner',
         accessor: 'winner',
+        Cell: ({ value }) => {
+          const nameArr = name.toLowerCase();
+
+          return nameArr.includes(value.toLowerCase()) ? (
+            <div style={{ background: "red" }}>{value}</div>
+          ) : (
+            value
+          );
+        }
       },
     ],
     []
