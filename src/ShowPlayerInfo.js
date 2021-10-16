@@ -17,7 +17,7 @@ function ShowPlayerInfo(props) {
   console.log(wins);
   
   return (
-    <div>{playerInfo[0].url} {wins}</div>
+    <div>{wins}</div>
   );
 }
 

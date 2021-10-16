@@ -1,9 +1,10 @@
 import './App.css';
 import FetchPlayer from './FetchPlayer';
+import Form from './Form';
 
 function App() {
   return (
-    <FetchPlayer></FetchPlayer>
+    <Form></Form>
   );
 }
 
