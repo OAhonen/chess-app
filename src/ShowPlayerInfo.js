@@ -13,12 +13,24 @@ function ShowPlayerInfo(props) {
   const columns = React.useMemo(
     () => [
       {
+        Header: 'Type',
+        accessor: 'type', // accessor is the "key" in the data
+      },
+      {
         Header: 'White',
         accessor: 'white', // accessor is the "key" in the data
       },
       {
+        Header: 'Rating',
+        accessor: 'whiteRating',
+      },
+      {
         Header: 'Black',
         accessor: 'black',
+      },
+      {
+        Header: 'Rating',
+        accessor: 'blackRating',
       },
       {
         Header: 'Winner',
@@ -62,7 +74,9 @@ function ShowPlayerInfo(props) {
         playerWon = 'Draw';
       }
 
-      games.push({white: e.white.username, black: e.black.username, winner: playerWon});
+      games.push({type: e.time_class, white: e.white.username, whiteRating: e.white.rating,
+                  black: e.black.username, blackRating: e.black.rating,
+                  winner: playerWon});
     });
   }
   
