@@ -1,9 +1,15 @@
+import printf from 'printf';
 import React from 'react';
 import { useSortBy, useTable } from 'react-table'
 
 function ShowPlayerInfo(props) {
   let playerInfo = props.playerInfo;
   let wins = 0;
+  let draws = 0;
+  let losses = 0;
+  let winPercentage = 0;
+  let drawPercentage = 0;
+  let lossPercengtage = 0;
   let games = [];
   let name = props.name;
   calculateWins();
@@ -64,6 +70,34 @@ function ShowPlayerInfo(props) {
   function calculateWins() {
     playerInfo.forEach(e => {
       
+      if (e.white.username === name) {
+        if (e.white.result === 'win') {
+          wins = wins + 1;
+        } else if (e.white.result === 'checkmated' || 
+                  e.white.result === 'timeout' ||
+                  e.white.result === 'resigned' ||
+                  e.white.result === 'lose' ||
+                  e.white.result === 'abandoned') {
+          losses = losses + 1;
+        } else {
+          draws = draws + 1;
+        }
+      }
+
+      if (e.black.username === name) {
+        if (e.black.result === 'win') {
+          wins = wins + 1;
+        } else if (e.black.result === 'checkmated' ||
+                  e.black.result ==='timeout' ||
+                  e.black.result === 'resigned' ||
+                  e.black.result === 'lose' ||
+                  e.black.result === 'abandoned') {
+          losses = losses + 1;
+        } else {
+          draws = draws + 1;
+        }
+      }
+      
       let playerWon = "";
 
       if (e.white.result === 'win') {
@@ -78,9 +112,20 @@ function ShowPlayerInfo(props) {
                   black: e.black.username, blackRating: e.black.rating,
                   winner: playerWon});
     });
+    winPercentage = wins / games.length * 100;
+    winPercentage = printf('%.2f', winPercentage);
+    drawPercentage = draws / games.length * 100;
+    drawPercentage = printf('%.2f', drawPercentage);
+    lossPercengtage = losses / games.length * 100;
+    lossPercengtage = printf('%.2f', lossPercengtage);
   }
   
   return (
+    <div>
+      Games: {playerInfo.length}<br/>
+      Wins: {wins} ({winPercentage}%)<br/>
+      Draws: {draws} ({drawPercentage}%)<br/>
+      Losses: {losses} ({lossPercengtage}%)<br/>
     <table {...getTableProps()} style={{ border: 'solid 1px blue' }}>
        <thead>
          {headerGroups.map(headerGroup => (
@@ -132,6 +177,7 @@ function ShowPlayerInfo(props) {
          })}
        </tbody>
      </table>
+     </div>
   );
 }
 
