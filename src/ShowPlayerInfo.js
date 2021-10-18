@@ -13,6 +13,7 @@ function ShowPlayerInfo(props) {
   let lossPercengtage = 0;
   let games = [];
   let name = props.name;
+  let chessMoves = [];
   calculateWins();
 
   const data = React.useMemo(() => games, [])
@@ -70,8 +71,12 @@ function ShowPlayerInfo(props) {
 
   function calculateWins() {
     playerInfo.forEach(e => {
+
+      let moves = JSON.parse(parser.pgn2json(e.pgn));
+      let result = "";
       
       if (e.white.username === name) {
+        result = e.white.result;
         if (e.white.result === 'win') {
           wins = wins + 1;
         } else if (e.white.result === 'checkmated' || 
@@ -86,6 +91,7 @@ function ShowPlayerInfo(props) {
       }
 
       if (e.black.username === name) {
+        result = e.black.result;
         if (e.black.result === 'win') {
           wins = wins + 1;
         } else if (e.black.result === 'checkmated' ||
@@ -109,6 +115,7 @@ function ShowPlayerInfo(props) {
         playerWon = 'Draw';
       }
 
+      chessMoves.push({result: result, moves: moves.moves});
       games.push({type: e.time_class, white: e.white.username, whiteRating: e.white.rating,
                   black: e.black.username, blackRating: e.black.rating,
                   winner: playerWon});
@@ -120,11 +127,7 @@ function ShowPlayerInfo(props) {
     lossPercengtage = losses / games.length * 100;
     lossPercengtage = printf('%.2f', lossPercengtage);
 
-    let json = parser.pgn2json(playerInfo[0].pgn)
-    // console.log(json);
-    let k = JSON.parse(json);
-    console.log(typeof k);
-    console.log(k.moves);
+    console.log(chessMoves);
   }
   
   return (
