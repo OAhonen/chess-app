@@ -4,6 +4,7 @@ import { useSortBy, useTable } from 'react-table'
 
 function ShowPlayerInfo(props) {
   let playerInfo = props.playerInfo;
+  const parser = require('chess-pgn-parser');
   let wins = 0;
   let draws = 0;
   let losses = 0;
@@ -118,6 +119,12 @@ function ShowPlayerInfo(props) {
     drawPercentage = printf('%.2f', drawPercentage);
     lossPercengtage = losses / games.length * 100;
     lossPercengtage = printf('%.2f', lossPercengtage);
+
+    let json = parser.pgn2json(playerInfo[0].pgn)
+    // console.log(json);
+    let k = JSON.parse(json);
+    console.log(typeof k);
+    console.log(k.moves);
   }
   
   return (
