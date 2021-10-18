@@ -15,6 +15,7 @@ function ShowPlayerInfo(props) {
   let name = props.name;
   let chessMoves = [];
   calculateWins();
+  checkOpenings();
 
   const data = React.useMemo(() => games, [])
 
@@ -128,6 +129,34 @@ function ShowPlayerInfo(props) {
     lossPercengtage = printf('%.2f', lossPercengtage);
 
     console.log(chessMoves);
+  }
+
+  function checkOpenings() {
+    // let firstMove = {amount: 0, move: chessMoves[0].moves[0]};
+    let moves = [{amount: 0, move: chessMoves[0].moves[0]}];
+
+    for (let i = 0; i < chessMoves.length; i++) {
+      for (let j = 0; j < moves.length; j++) {
+        if (chessMoves[i].moves[0] === moves[j].move) {
+          moves[j].amount = moves[j].amount + 1;
+          break;
+        }
+        if (j === (moves.length - 1) && chessMoves[i].moves[0] !== moves[j].move) {
+          moves.push({amount: 1, move: chessMoves[i].moves[0]})
+          break;
+        }
+      }
+    }
+
+    console.log(moves);
+
+    /*
+    chessMoves.forEach(e => {
+      if (e.moves[0] === ) {
+
+      }
+    });
+    */
   }
   
   return (
