@@ -132,31 +132,41 @@ function ShowPlayerInfo(props) {
   }
 
   function checkOpenings() {
-    // let firstMove = {amount: 0, move: chessMoves[0].moves[0]};
-    let moves = [{amount: 0, move: chessMoves[0].moves[0]}];
+    let whitesIndex = [];
+    let blacksIndex = [];
+    let allMoves = [];
 
-    for (let i = 0; i < chessMoves.length; i++) {
-      for (let j = 0; j < moves.length; j++) {
-        if (chessMoves[i].moves[0] === moves[j].move) {
-          moves[j].amount = moves[j].amount + 1;
-          break;
-        }
-        if (j === (moves.length - 1) && chessMoves[i].moves[0] !== moves[j].move) {
-          moves.push({amount: 1, move: chessMoves[i].moves[0]})
-          break;
-        }
+    for (let i = 0; i < playerInfo.length; i++) {
+      if (playerInfo[i].white.username === name) {
+        whitesIndex.push(i);
+      } else {
+        blacksIndex.push(i);
       }
     }
 
-    console.log(moves);
+    for (let i = 0; i < whitesIndex.length; i++) {
+      let x = whitesIndex[i];
+      allMoves.push({move: chessMoves[x].moves[0], pieces: 'white'})
+    }
 
-    /*
-    chessMoves.forEach(e => {
-      if (e.moves[0] === ) {
+    for (let i = 0; i < blacksIndex.length; i++) {
+      let y = blacksIndex[i]
+      allMoves.push({move: chessMoves[y].moves[0], pieces: 'black'})
+    }
 
-      }
+    console.log(allMoves)
+
+    let counter = {};
+    allMoves.forEach(function(obj) {
+      let key = JSON.stringify(obj);
+      counter[key] = (counter[key] || 0) + 1;
     });
-    */
+    console.log(counter);
+
+    console.log(Object.keys(counter)[0])
+    let o = JSON.parse(Object.keys(counter)[0])
+    o.amount = Object.values(counter)[0];
+    console.log(o)
   }
   
   return (
