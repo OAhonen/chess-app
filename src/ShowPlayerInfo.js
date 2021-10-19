@@ -14,6 +14,7 @@ function ShowPlayerInfo(props) {
   let games = [];
   let name = props.name;
   let chessMoves = [];
+  let topThreeOpenings = [];
   calculateWins();
   checkOpenings();
 
@@ -127,14 +128,13 @@ function ShowPlayerInfo(props) {
     drawPercentage = printf('%.2f', drawPercentage);
     lossPercengtage = losses / games.length * 100;
     lossPercengtage = printf('%.2f', lossPercengtage);
-
-    console.log(chessMoves);
   }
 
   function checkOpenings() {
     let whitesIndex = [];
     let blacksIndex = [];
     let allMoves = [];
+    let allOpenings = [];
 
     for (let i = 0; i < playerInfo.length; i++) {
       if (playerInfo[i].white.username === name) {
@@ -146,12 +146,28 @@ function ShowPlayerInfo(props) {
 
     for (let i = 0; i < whitesIndex.length; i++) {
       let x = whitesIndex[i];
-      allMoves.push({move: chessMoves[x].moves[0], pieces: 'white'})
+      if (chessMoves[x].moves.length > 5) {
+        allMoves.push({move1: chessMoves[x].moves[0],
+                    move2: chessMoves[x].moves[1],
+                    move3: chessMoves[x].moves[2],
+                    move4: chessMoves[x].moves[3],
+                    move5: chessMoves[x].moves[4],
+                    move6: chessMoves[x].moves[5],
+                    pieces: 'white'})
+      }
     }
 
     for (let i = 0; i < blacksIndex.length; i++) {
       let y = blacksIndex[i]
-      allMoves.push({move: chessMoves[y].moves[0], pieces: 'black'})
+      if (chessMoves[y].moves.length > 5) {
+        allMoves.push({move1: chessMoves[y].moves[0],
+                      move2: chessMoves[y].moves[1],
+                      move3: chessMoves[y].moves[2],
+                      move4: chessMoves[y].moves[3],
+                      move5: chessMoves[y].moves[4],
+                      move6: chessMoves[y].moves[5],
+                      pieces: 'black'})
+      }
     }
 
     console.log(allMoves)
@@ -161,12 +177,21 @@ function ShowPlayerInfo(props) {
       let key = JSON.stringify(obj);
       counter[key] = (counter[key] || 0) + 1;
     });
-    console.log(counter);
 
-    console.log(Object.keys(counter)[0])
-    let o = JSON.parse(Object.keys(counter)[0])
-    o.amount = Object.values(counter)[0];
-    console.log(o)
+    let amount = Object.values(counter).length;
+
+    for (let i = 0; i < amount; i++) {
+      let opening = JSON.parse(Object.keys(counter)[i])
+      opening.amount = Object.values(counter)[i]
+      allOpenings.push(opening)
+    }
+
+    let sortable = allOpenings.sort((a, b) => (a.amount < b.amount) ? 1 : -1)
+    for (let i = 0; i < 3; i++) {
+      topThreeOpenings[i] = sortable[i];
+    }
+
+    console.log(topThreeOpenings)
   }
   
   return (
@@ -175,6 +200,33 @@ function ShowPlayerInfo(props) {
       Wins: {wins} ({winPercentage}%)<br/>
       Draws: {draws} ({drawPercentage}%)<br/>
       Losses: {losses} ({lossPercengtage}%)<br/>
+      The most common opening:&nbsp;
+      {topThreeOpenings[0].move1}&nbsp;
+      {topThreeOpenings[0].move2}&nbsp;
+      {topThreeOpenings[0].move3}&nbsp;
+      {topThreeOpenings[0].move4}&nbsp;
+      {topThreeOpenings[0].move5}&nbsp;
+      {topThreeOpenings[0].move6}&nbsp;
+      ({topThreeOpenings[0].pieces})&nbsp;
+      Amount: {topThreeOpenings[0].amount}<br/>
+      The second most common opening:&nbsp;
+      {topThreeOpenings[1].move1}&nbsp;
+      {topThreeOpenings[1].move2}&nbsp;
+      {topThreeOpenings[1].move3}&nbsp;
+      {topThreeOpenings[1].move4}&nbsp;
+      {topThreeOpenings[1].move5}&nbsp;
+      {topThreeOpenings[1].move6}&nbsp;
+      ({topThreeOpenings[1].pieces})&nbsp;
+      Amount: {topThreeOpenings[1].amount}<br/>
+      The third most common opening:&nbsp;
+      {topThreeOpenings[2].move1}&nbsp;
+      {topThreeOpenings[2].move2}&nbsp;
+      {topThreeOpenings[2].move3}&nbsp;
+      {topThreeOpenings[2].move4}&nbsp;
+      {topThreeOpenings[2].move5}&nbsp;
+      {topThreeOpenings[2].move6}&nbsp;
+      ({topThreeOpenings[2].pieces})&nbsp;
+      Amount: {topThreeOpenings[2].amount}<br/>
     <table {...getTableProps()} style={{ border: 'solid 1px blue' }}>
        <thead>
          {headerGroups.map(headerGroup => (
