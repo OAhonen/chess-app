@@ -31,11 +31,15 @@ function FetchPlayer(props) {
     ?
     <div>No player found</div>
     :
-    player.length === 0
+    loading
     ?
-    <div>No games played</div>
+    <div>loading...</div>
     :
-    loading ? <div>loading...</div> : <ShowPlayerInfo playerInfo={player} name={name}/>
+    player.length !== 0
+    ?
+    <ShowPlayerInfo playerInfo={player} name={name}/>
+    :
+    <div>No games played.</div>
   );
 }
 
