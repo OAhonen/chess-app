@@ -48,10 +48,14 @@ function ShowPlayerInfo(props) {
         Cell: ({ value }) => {
           const nameArr = name.toLowerCase();
 
+          if (value === 'Draw') {
+            return <div style={{ background: "grey" }}>{value}</div>
+          }
+
           return nameArr.includes(value.toLowerCase()) ? (
-            <div style={{ background: "red" }}>{value}</div>
+            <div style={{ background: "green" }}>{value}</div>
           ) : (
-            value
+            <div style={{ background: "red" }}>{value}</div>
           );
         }
       },
