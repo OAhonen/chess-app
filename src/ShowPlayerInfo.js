@@ -11,13 +11,14 @@ function ShowPlayerInfo(props) {
   let winPercentage = 0;
   let drawPercentage = 0;
   let lossPercengtage = 0;
-  let openingWinPercentage = 0;
+  let firstOpeningPercentage = 0;
+  let secondOpeningPercentage = 0;
+  let thirdOpeningPercentage = 0;
   let games = [];
   let name = props.name;
   let chessMoves = [];
   let topThreeOpenings = [];
   let topThreeWins = [];
-  let openingTotal = 0;
   calculateWins();
   checkOpenings();
 
@@ -240,21 +241,12 @@ function ShowPlayerInfo(props) {
       topThreeWins[i] = winSortable[i];
     }
 
-    for (let i = 0; i < allOpenings.length; i++) {
-      if (topThreeWins[0].move1 === allOpenings[i].move1 &&
-          topThreeWins[0].move2 === allOpenings[i].move2 &&
-          topThreeWins[0].move3 === allOpenings[i].move3 &&
-          topThreeWins[0].move4 === allOpenings[i].move4 &&
-          topThreeWins[0].move5 === allOpenings[i].move5 &&
-          topThreeWins[0].move6 === allOpenings[i].move6 &&
-          topThreeWins[0].pieces === allOpenings[i].pieces) {
-            openingWinPercentage = topThreeWins[0].amount / allOpenings[i].amount * 100;
-            console.log(topThreeWins[0].amount)
-            console.log(allOpenings[i].amount)
-            openingWinPercentage = printf('%.2f', openingWinPercentage);
-            openingTotal = allOpenings[i].amount;
-          }
-    }
+    firstOpeningPercentage = topThreeWins[0].amount / topThreeOpenings[0].amount * 100;
+    firstOpeningPercentage = printf('%.2f', firstOpeningPercentage);
+    secondOpeningPercentage = topThreeWins[1].amount / topThreeOpenings[1].amount * 100;
+    secondOpeningPercentage = printf('%.2f', secondOpeningPercentage);
+    thirdOpeningPercentage = topThreeWins[2].amount / topThreeOpenings[2].amount * 100;
+    thirdOpeningPercentage = printf('%.2f', thirdOpeningPercentage);
     console.log(winSortable)
   }
   
@@ -273,7 +265,8 @@ function ShowPlayerInfo(props) {
       {topThreeOpenings[0].move5}&nbsp;
       {topThreeOpenings[0].move6}&nbsp;
       ({topThreeOpenings[0].pieces})&nbsp;
-      Amount: {topThreeOpenings[0].amount} games<br/>
+      {topThreeWins[0].amount} wins
+      / {topThreeOpenings[0].amount} games ({firstOpeningPercentage}%)<br/>
       The second most common opening:&nbsp;
       {topThreeOpenings[1].move1}&nbsp;
       {topThreeOpenings[1].move2}&nbsp;
@@ -282,7 +275,8 @@ function ShowPlayerInfo(props) {
       {topThreeOpenings[1].move5}&nbsp;
       {topThreeOpenings[1].move6}&nbsp;
       ({topThreeOpenings[1].pieces})&nbsp;
-      Amount: {topThreeOpenings[1].amount} games<br/>
+      {topThreeWins[1].amount} wins
+      / {topThreeOpenings[1].amount} games ({secondOpeningPercentage}%)<br/>
       The third most common opening:&nbsp;
       {topThreeOpenings[2].move1}&nbsp;
       {topThreeOpenings[2].move2}&nbsp;
@@ -291,16 +285,8 @@ function ShowPlayerInfo(props) {
       {topThreeOpenings[2].move5}&nbsp;
       {topThreeOpenings[2].move6}&nbsp;
       ({topThreeOpenings[2].pieces})&nbsp;
-      Amount: {topThreeOpenings[2].amount} games<br/>
-      The most successful opening:&nbsp;
-      {topThreeWins[0].move1}&nbsp;
-      {topThreeWins[0].move2}&nbsp;
-      {topThreeWins[0].move3}&nbsp;
-      {topThreeWins[0].move4}&nbsp;
-      {topThreeWins[0].move5}&nbsp;
-      {topThreeWins[0].move6}&nbsp;
-      ({topThreeWins[0].pieces})&nbsp;
-      Amount: {topThreeWins[0].amount} out of {openingTotal} ({openingWinPercentage}%)<br/>
+      {topThreeWins[2].amount} Wins
+      / {topThreeOpenings[2].amount} games ({thirdOpeningPercentage}%)<br/>
     <table {...getTableProps()} style={{ border: 'solid 1px blue' }}>
        <thead>
          {headerGroups.map(headerGroup => (
