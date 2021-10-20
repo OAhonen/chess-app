@@ -27,6 +27,10 @@ function FetchPlayer(props) {
 }, []);
 
   return (
+    player === undefined
+    ?
+    <div>No player found</div>
+    :
     loading ? <div>loading...</div> : <ShowPlayerInfo playerInfo={player} name={name}/>
   );
 }
