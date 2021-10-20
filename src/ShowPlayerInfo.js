@@ -11,10 +11,13 @@ function ShowPlayerInfo(props) {
   let winPercentage = 0;
   let drawPercentage = 0;
   let lossPercengtage = 0;
+  let openingWinPercentage = 0;
   let games = [];
   let name = props.name;
   let chessMoves = [];
   let topThreeOpenings = [];
+  let topThreeWins = [];
+  let openingTotal = 0;
   calculateWins();
   checkOpenings();
 
@@ -82,32 +85,36 @@ function ShowPlayerInfo(props) {
       let result = "";
       
       if (e.white.username.toLowerCase() === name.toLowerCase()) {
-        result = e.white.result;
         if (e.white.result === 'win') {
           wins = wins + 1;
+          result = 'win';
         } else if (e.white.result === 'checkmated' || 
                   e.white.result === 'timeout' ||
                   e.white.result === 'resigned' ||
                   e.white.result === 'lose' ||
                   e.white.result === 'abandoned') {
           losses = losses + 1;
+          result = 'loss'
         } else {
           draws = draws + 1;
+          result = 'draw'
         }
       }
 
       if (e.black.username.toLowerCase() === name.toLowerCase()) {
-        result = e.black.result;
         if (e.black.result === 'win') {
           wins = wins + 1;
+          result = 'win';
         } else if (e.black.result === 'checkmated' ||
                   e.black.result ==='timeout' ||
                   e.black.result === 'resigned' ||
                   e.black.result === 'lose' ||
                   e.black.result === 'abandoned') {
           losses = losses + 1;
+          result = 'loss'
         } else {
           draws = draws + 1;
+          result = 'draw'
         }
       }
       
@@ -139,6 +146,8 @@ function ShowPlayerInfo(props) {
     let blacksIndex = [];
     let allMoves = [];
     let allOpenings = [];
+    let onlyWins = [];
+    let countedWins = [];
 
     for (let i = 0; i < playerInfo.length; i++) {
       if (playerInfo[i].white.username === name) {
@@ -152,12 +161,21 @@ function ShowPlayerInfo(props) {
       let x = whitesIndex[i];
       if (chessMoves[x].moves.length > 5) {
         allMoves.push({move1: chessMoves[x].moves[0],
-                    move2: chessMoves[x].moves[1],
-                    move3: chessMoves[x].moves[2],
-                    move4: chessMoves[x].moves[3],
-                    move5: chessMoves[x].moves[4],
-                    move6: chessMoves[x].moves[5],
-                    pieces: 'white'})
+                        move2: chessMoves[x].moves[1],
+                        move3: chessMoves[x].moves[2],
+                        move4: chessMoves[x].moves[3],
+                        move5: chessMoves[x].moves[4],
+                        move6: chessMoves[x].moves[5],
+                        pieces: 'white'})
+        if (chessMoves[x].result === 'win') {
+          onlyWins.push({move1: chessMoves[x].moves[0],
+                        move2: chessMoves[x].moves[1],
+                        move3: chessMoves[x].moves[2],
+                        move4: chessMoves[x].moves[3],
+                        move5: chessMoves[x].moves[4],
+                        move6: chessMoves[x].moves[5],
+                        pieces: 'white'})
+        }
       }
     }
 
@@ -171,6 +189,15 @@ function ShowPlayerInfo(props) {
                       move5: chessMoves[y].moves[4],
                       move6: chessMoves[y].moves[5],
                       pieces: 'black'})
+        if (chessMoves[y].result === 'win') {
+          onlyWins.push({move1: chessMoves[y].moves[0],
+                        move2: chessMoves[y].moves[1],
+                        move3: chessMoves[y].moves[2],
+                        move4: chessMoves[y].moves[3],
+                        move5: chessMoves[y].moves[4],
+                        move6: chessMoves[y].moves[5],
+                        pieces: 'black'})
+        }
       }
     }
 
@@ -181,8 +208,15 @@ function ShowPlayerInfo(props) {
       let key = JSON.stringify(obj);
       counter[key] = (counter[key] || 0) + 1;
     });
+    
+    let winCounter = {};
+    onlyWins.forEach(function(obj) {
+      let key = JSON.stringify(obj);
+      winCounter[key] = (winCounter[key] || 0) + 1;
+    });
 
     let amount = Object.values(counter).length;
+    let winAmount = Object.values(winCounter).length;
 
     for (let i = 0; i < amount; i++) {
       let opening = JSON.parse(Object.keys(counter)[i])
@@ -190,12 +224,38 @@ function ShowPlayerInfo(props) {
       allOpenings.push(opening)
     }
 
+    for (let i = 0; i < winAmount; i++) {
+      let opening = JSON.parse(Object.keys(winCounter)[i])
+      opening.amount = Object.values(winCounter)[i]
+      countedWins.push(opening)
+    }
+
     let sortable = allOpenings.sort((a, b) => (a.amount < b.amount) ? 1 : -1)
     for (let i = 0; i < 3; i++) {
       topThreeOpenings[i] = sortable[i];
     }
 
-    console.log(topThreeOpenings)
+    let winSortable = countedWins.sort((a, b) => (a.amount < b.amount) ? 1 : -1)
+    for (let i = 0; i < 3; i++) {
+      topThreeWins[i] = winSortable[i];
+    }
+
+    for (let i = 0; i < allOpenings.length; i++) {
+      if (topThreeWins[0].move1 === allOpenings[i].move1 &&
+          topThreeWins[0].move2 === allOpenings[i].move2 &&
+          topThreeWins[0].move3 === allOpenings[i].move3 &&
+          topThreeWins[0].move4 === allOpenings[i].move4 &&
+          topThreeWins[0].move5 === allOpenings[i].move5 &&
+          topThreeWins[0].move6 === allOpenings[i].move6 &&
+          topThreeWins[0].pieces === allOpenings[i].pieces) {
+            openingWinPercentage = topThreeWins[0].amount / allOpenings[i].amount * 100;
+            console.log(topThreeWins[0].amount)
+            console.log(allOpenings[i].amount)
+            openingWinPercentage = printf('%.2f', openingWinPercentage);
+            openingTotal = allOpenings[i].amount;
+          }
+    }
+    console.log(winSortable)
   }
   
   return (
@@ -213,7 +273,7 @@ function ShowPlayerInfo(props) {
       {topThreeOpenings[0].move5}&nbsp;
       {topThreeOpenings[0].move6}&nbsp;
       ({topThreeOpenings[0].pieces})&nbsp;
-      Amount: {topThreeOpenings[0].amount}<br/>
+      Amount: {topThreeOpenings[0].amount} games<br/>
       The second most common opening:&nbsp;
       {topThreeOpenings[1].move1}&nbsp;
       {topThreeOpenings[1].move2}&nbsp;
@@ -222,7 +282,7 @@ function ShowPlayerInfo(props) {
       {topThreeOpenings[1].move5}&nbsp;
       {topThreeOpenings[1].move6}&nbsp;
       ({topThreeOpenings[1].pieces})&nbsp;
-      Amount: {topThreeOpenings[1].amount}<br/>
+      Amount: {topThreeOpenings[1].amount} games<br/>
       The third most common opening:&nbsp;
       {topThreeOpenings[2].move1}&nbsp;
       {topThreeOpenings[2].move2}&nbsp;
@@ -231,7 +291,16 @@ function ShowPlayerInfo(props) {
       {topThreeOpenings[2].move5}&nbsp;
       {topThreeOpenings[2].move6}&nbsp;
       ({topThreeOpenings[2].pieces})&nbsp;
-      Amount: {topThreeOpenings[2].amount}<br/>
+      Amount: {topThreeOpenings[2].amount} games<br/>
+      The most successful opening:&nbsp;
+      {topThreeWins[0].move1}&nbsp;
+      {topThreeWins[0].move2}&nbsp;
+      {topThreeWins[0].move3}&nbsp;
+      {topThreeWins[0].move4}&nbsp;
+      {topThreeWins[0].move5}&nbsp;
+      {topThreeWins[0].move6}&nbsp;
+      ({topThreeWins[0].pieces})&nbsp;
+      Amount: {topThreeWins[0].amount} out of {openingTotal} ({openingWinPercentage}%)<br/>
     <table {...getTableProps()} style={{ border: 'solid 1px blue' }}>
        <thead>
          {headerGroups.map(headerGroup => (
