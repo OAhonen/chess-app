@@ -32,6 +32,7 @@ function Form() {
 
           <label>Name:<br/>
             <input
+              pattern = "^[A-Za-z0-9]+$"
               type = "text"
               value = {name}
               onChange = {(e) => setName(e.target.value)}
