@@ -77,7 +77,7 @@ function ShowPlayerInfo(props) {
       let moves = JSON.parse(parser.pgn2json(e.pgn));
       let result = "";
       
-      if (e.white.username === name) {
+      if (e.white.username.toLowerCase() === name.toLowerCase()) {
         result = e.white.result;
         if (e.white.result === 'win') {
           wins = wins + 1;
@@ -92,7 +92,7 @@ function ShowPlayerInfo(props) {
         }
       }
 
-      if (e.black.username === name) {
+      if (e.black.username.toLowerCase() === name.toLowerCase()) {
         result = e.black.result;
         if (e.black.result === 'win') {
           wins = wins + 1;
@@ -196,6 +196,7 @@ function ShowPlayerInfo(props) {
   
   return (
     <div>
+      {name}<br/>
       Games: {playerInfo.length}<br/>
       Wins: {wins} ({winPercentage}%)<br/>
       Draws: {draws} ({drawPercentage}%)<br/>
