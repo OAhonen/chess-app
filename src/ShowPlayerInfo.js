@@ -78,10 +78,6 @@ function ShowPlayerInfo(props) {
     rows,
     prepareRow,
   } = useTable({ columns, data }, useSortBy)
-  
-  if (playerInfo.length === 0) {
-    return <div>No games played in this month.</div>
-  }
 
   function calculateWins() {
     playerInfo.forEach(e => {
