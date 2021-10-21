@@ -20,8 +20,6 @@ function Form() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(name);
-    console.log(month);
     setSubmitted(true);
   }
 

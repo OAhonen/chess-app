@@ -6,8 +6,6 @@ function FetchPlayer(props) {
   const [loading, isLoading] = useState(true);
   let name = props.name;
   let month = props.month;
-  console.log(name);
-  console.log(month);
 
   React.useEffect(() => {
     const url = 'https://api.chess.com/pub/player/' + name + '/games/2021/' + month;
