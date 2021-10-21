@@ -27,8 +27,12 @@ function ShowPlayerInfo(props) {
   const columns = React.useMemo(
     () => [
       {
+        Header: 'Date',
+        accessor: 'date', // accessor is the "key" in the data
+      },
+      {
         Header: 'Type',
-        accessor: 'type', // accessor is the "key" in the data
+        accessor: 'type',
       },
       {
         Header: 'White',
@@ -129,10 +133,13 @@ function ShowPlayerInfo(props) {
         playerWon = 'Draw';
       }
 
+      let time = new Date(e.end_time*1000)
+      let date = `${time.getDate()}.${time.getMonth()+1}.${time.getFullYear()}`
+
       chessMoves.push({result: result, moves: moves.moves});
-      games.push({type: e.time_class, white: e.white.username, whiteRating: e.white.rating,
-                  black: e.black.username, blackRating: e.black.rating,
-                  winner: playerWon});
+      games.push({date: date, type: e.time_class, white: e.white.username,
+                  whiteRating: e.white.rating, black: e.black.username,
+                  blackRating: e.black.rating, winner: playerWon});
     });
     winPercentage = wins / games.length * 100;
     winPercentage = printf('%.2f', winPercentage);
@@ -202,8 +209,6 @@ function ShowPlayerInfo(props) {
       }
     }
 
-    console.log(allMoves)
-
     let counter = {};
     allMoves.forEach(function(obj) {
       let key = JSON.stringify(obj);
@@ -247,7 +252,6 @@ function ShowPlayerInfo(props) {
     secondOpeningPercentage = printf('%.2f', secondOpeningPercentage);
     thirdOpeningPercentage = topThreeWins[2].amount / topThreeOpenings[2].amount * 100;
     thirdOpeningPercentage = printf('%.2f', thirdOpeningPercentage);
-    console.log(winSortable)
   }
   
   return (
