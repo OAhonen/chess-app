@@ -27,11 +27,11 @@ function FetchPlayer(props) {
   return (
     player === undefined
     ?
-    <div>No player found</div>
+    <div>No player found.</div>
     :
     loading
     ?
-    <div>loading...</div>
+    <div>Loading...</div>
     :
     player.length !== 0
     ?
