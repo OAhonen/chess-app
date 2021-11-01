@@ -35,10 +35,18 @@ function ShowChessBoard(props) {
     window.location.reload();
   }
 
+  const resetBoard = (event) => {
+    event.preventDefault();
+    safeGameMutate((game) => {
+      game.reset();
+    });
+  }
+
   return (
     <div>
       <button onClick={buttonClick}>Back to search</button>
       <Chessboard position={game.fen()} onPieceDrop={onDrop}></Chessboard>
+      <button onClick={resetBoard}>Reset</button>
       <ShowPlayerData playerInfo={playerInfo} name={name} history={game.history()}></ShowPlayerData>
     </div>
   )
