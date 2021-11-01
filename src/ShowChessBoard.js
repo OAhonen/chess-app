@@ -30,10 +30,16 @@ function ShowChessBoard(props) {
     return true;
   }
 
+  const buttonClick = (event) => {
+    event.preventDefault();
+    window.location.reload();
+  }
+
   return (
     <div>
-    <Chessboard position={game.fen()} onPieceDrop={onDrop}></Chessboard>
-    <ShowPlayerData playerInfo={playerInfo} name={name} history={game.history()}></ShowPlayerData>
+      <button onClick={buttonClick}>Back to search</button>
+      <Chessboard position={game.fen()} onPieceDrop={onDrop}></Chessboard>
+      <ShowPlayerData playerInfo={playerInfo} name={name} history={game.history()}></ShowPlayerData>
     </div>
   )
 }

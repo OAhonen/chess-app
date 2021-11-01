@@ -249,9 +249,15 @@ function ShowPlayerInfo(props) {
     thirdOpeningPercentage = topThreeWins[2].amount / topThreeOpenings[2].amount * 100;
     thirdOpeningPercentage = printf('%.2f', thirdOpeningPercentage);
   }
+
+  const buttonClick = (event) => {
+    event.preventDefault();
+    window.location.reload();
+  }
   
   return (
     <div>
+      <button onClick={buttonClick}>Back to search</button><br/>
       {name}<br/>
       Games: {playerInfo.length}<br/>
       Wins: {wins} ({winPercentage}%)<br/>
