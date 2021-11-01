@@ -16,6 +16,11 @@ function Form() {
     {label: '10', value: '10'}
   ]);
   const [month, setMonth] = useState("01");
+  const [datatypes] = useState([
+    {label: 'Table', value: 'Table'},
+    {label: 'Chessboard', value: 'Chessboard'}
+  ]);
+  const [datatype, setDatatype] = useState("Table");
   const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = (event) => {
@@ -25,7 +30,7 @@ function Form() {
 
   return (
     <div>
-      {submitted ? <FetchPlayer name={name} month={month}/> :
+      {submitted ? <FetchPlayer name={name} month={month} datatype={datatype}/> :
         <form onSubmit={handleSubmit}>
 
           <label>Name:<br/>
@@ -45,7 +50,15 @@ function Form() {
               </option>
             ))}
           </select><br/>
-
+          
+          Datatype: <br/>
+          <select onChange = {(e) => setDatatype(e.target.value)}>
+            {datatypes.map(({ label, value }) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
+          </select><br/>
           <input type="submit"/>
         </form>
       }

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ShowChessBoard from './ShowChessBoard';
 import ShowPlayerInfo from './ShowPlayerInfo';
 
 function FetchPlayer(props) {
@@ -6,6 +7,7 @@ function FetchPlayer(props) {
   const [loading, isLoading] = useState(true);
   let name = props.name;
   let month = props.month;
+  let datatype = props.datatype;
 
   React.useEffect(() => {
     const url = 'https://api.chess.com/pub/player/' + name + '/games/2021/' + month;
@@ -33,11 +35,15 @@ function FetchPlayer(props) {
     ?
     <div>Loading...</div>
     :
-    player.length !== 0
+    player.length === 0
+    ?
+    <div>No games played.</div>
+    :
+    datatype === 'Table'
     ?
     <ShowPlayerInfo playerInfo={player} name={name}/>
     :
-    <div>No games played.</div>
+    <ShowChessBoard playerInfo={player} name={name}/>
   );
 }
 
