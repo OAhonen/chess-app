@@ -1,6 +1,6 @@
 import Chess from 'chess.js';
 import { Chessboard } from 'react-chessboard';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import ShowPlayerData from './ShowPlayerData';
 
 function ShowChessBoard(props) {
@@ -8,6 +8,7 @@ function ShowChessBoard(props) {
   let name = props.name;
 
   const [game, setGame] = useState(new Chess());
+  const chessboardRef = useRef();
 
   function safeGameMutate(modify) {
     setGame((g) => {
@@ -42,11 +43,20 @@ function ShowChessBoard(props) {
     });
   }
 
+  const undoMove = (event) => {
+    event.preventDefault();
+    safeGameMutate((game) => {
+      game.undo();
+      chessboardRef.current.clearPremoves();
+    });
+  }
+
   return (
     <div>
       <button onClick={buttonClick}>Back to search</button>
-      <Chessboard position={game.fen()} onPieceDrop={onDrop}></Chessboard>
+      <Chessboard position={game.fen()} onPieceDrop={onDrop} ref={chessboardRef}></Chessboard>
       <button onClick={resetBoard}>Reset</button>
+      <button onClick={undoMove}>Undo</button>
       <ShowPlayerData playerInfo={playerInfo} name={name} history={game.history()}></ShowPlayerData>
     </div>
   )
